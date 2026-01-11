@@ -403,33 +403,54 @@
         // Music and Loader
         const music = document.getElementById('bg-music');
         const loader = document.getElementById('page-loader');
+        let musicStarted = false;
+        
         music.volume = 0.7;
         
-        // When user taps the loader, start music and enter site
-        loader.addEventListener('click', function() {
-            music.play()
-                .then(() => console.log('✅ Music playing'))
-                .catch(e => console.log('Music blocked:', e));
+        // Preload audio
+        music.load();
+        
+        // Debug listeners
+        music.addEventListener('loadeddata', () => {
+            console.log('✅ Audio file loaded successfully');
+        });
+        
+        music.addEventListener('error', (e) => {
+            console.error('❌ Audio error - check if moideen.mp3 exists');
+        });
+        
+        music.addEventListener('play', () => {
+            console.log('▶️ Audio is now playing');
+        });
+        
+        function startExperience() {
+            if (musicStarted) return;
+            musicStarted = true;
             
+            console.log('Starting music...');
+            
+            // Start music
+            music.play()
+                .then(() => {
+                    console.log('✅ Music started successfully!');
+                })
+                .catch(e => {
+                    console.error('❌ Music play failed:', e.message);
+                });
+            
+            // Hide loader
             loader.classList.add('hidden');
             setTimeout(() => {
                 loader.style.display = 'none';
-                AOS.init({ once: true });
             }, 500);
-        });
-
-        // Also allow touch for mobile
-        loader.addEventListener('touchstart', function() {
-            music.play()
-                .then(() => console.log('✅ Music playing'))
-                .catch(e => console.log('Music blocked:', e));
             
-            loader.classList.add('hidden');
-            setTimeout(() => {
-                loader.style.display = 'none';
-                AOS.init({ once: true });
-            }, 500);
-        });
+            // Initialize animations
+            AOS.init({ once: true });
+        }
+        
+        // Listen for both click and touch
+        loader.addEventListener('click', startExperience);
+        loader.addEventListener('touchend', startExperience);
 
         // Countdown
         function updateCountdown() {
