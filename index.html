@@ -13,36 +13,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shahshad & Ahabima - Wedding Invitation</title>
-    <link rel="icon" type="image/png" href="wedding-couple.png"><!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-CYPWW08ZKN"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag() { dataLayer.push(arguments); }
-        gtag('js', new Date());
-        gtag('config', 'G-CYPWW08ZKN');
-    </script>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shahshad & Ahabima - Wedding Invitation</title>
     <link rel="icon" type="image/png" href="wedding-couple.png">
 
     <!-- Social Media Sharing (Open Graph) -->
-    <meta property="og:title" content="Shahashad  &  Ahabima - Wedding Invitation">
-    <meta property="og:description"
-        content="We are getting married! Join us on January, 2026 at Madavoor Palace Auditorium.">
+    <meta property="og:title" content="Shahashad & Ahabima - Wedding Invitation">
+    <meta property="og:description" content="We are getting married! Join us on January 18, 2026 at Madavoor Palace Auditorium.">
     <meta property="og:image" content="ChatGPT Image Jan 4, 2026, 12_58_51 AM.png">
     <meta property="og:url" content="https://shahasad-yaz.github.io/wedding-invitation/">
     <meta property="og:type" content="website">
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Shahashad  &  Ahabima - Wedding Invitation">
-    <meta name="twitter:description"
-        content="We are getting married! Join us on January 18, 2026 at Madavoor Palace Auditorium.">
+    <meta name="twitter:title" content="Shahashad & Ahabima - Wedding Invitation">
+    <meta name="twitter:description" content="We are getting married! Join us on January 18, 2026 at Madavoor Palace Auditorium.">
     <meta name="twitter:image" content="love.png">
 
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
@@ -84,8 +67,6 @@
             opacity: 0.05;
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
         }
-
-
 
         /* --- FALLING PETALS ANIMATION --- */
         #petal-container {
@@ -548,136 +529,76 @@
 
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-        // --- Move Music Code to TOP (before everything else) ---
+        // --- Music Control (Priority: Load and Play ASAP) ---
         const music = document.getElementById('bg-music');
         let musicStarted = false;
-        let loadAttempted = false;
 
-        // Set volume to ensure it's audible
         music.volume = 0.7;
 
-        // Preload the audio
-        function preloadAudio() {
-            if (!loadAttempted) {
-                loadAttempted = true;
-                music.load();
-                console.log('Audio preloading started');
-            }
-        }
-
-        // Event listeners for debugging
+        // Event listeners
         music.addEventListener('loadedmetadata', () => {
-            console.log('✅ Audio metadata loaded - Duration:', music.duration, 'seconds');
+            console.log('✅ Audio loaded - Duration:', music.duration, 'seconds');
         });
 
-        music.addEventListener('canplaythrough', () => {
-            console.log('✅ Audio can play through without buffering');
-        });
-
-        music.addEventListener('error', (e) => {
-            console.error('❌ Audio error:', music.error ? music.error.code : 'unknown');
+        music.addEventListener('error', () => {
+            console.error('❌ Audio error - Check if moideen.mp3 exists');
         });
 
         music.addEventListener('play', () => {
             console.log('▶️ Audio playing');
         });
 
-        music.addEventListener('pause', () => {
-            console.log('⏸️ Audio paused');
-        });
-
-        // Attempt to play music
+        // Play function
         function playMusic() {
             if (musicStarted) return;
-
-            console.log('Attempting to play music... readyState:', music.readyState);
-            
-            // Ensure audio is loaded
-            if (music.readyState === 0) {
-                preloadAudio();
-                // Try again after a short delay
-                setTimeout(playMusic, 100);
-                return;
-            }
 
             music.play()
                 .then(() => {
                     musicStarted = true;
-                    console.log('✅ SUCCESS! Music is playing');
+                    console.log('✅ Music playing successfully!');
                 })
                 .catch(err => {
-                    console.warn('⚠️ Play failed:', err.message);
-                    // Don't give up, try again on next interaction
+                    console.warn('⚠️ Autoplay blocked - will play on user interaction');
                 });
         }
 
-        // Start loading audio IMMEDIATELY
-        preloadAudio();
+        // Load and try to play immediately
+        music.load();
+        playMusic();
 
-        // Try to play as soon as possible
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', playMusic);
-        } else {
+        // Play on any interaction
+        function handleInteraction() {
             playMusic();
-        }
-
-        // Play on ANY user interaction - be very aggressive
-        let interactionAttempts = 0;
-        const maxAttempts = 5;
-
-        function handleInteraction(e) {
-            interactionAttempts++;
-            console.log(`User interaction #${interactionAttempts}:`, e.type);
-            
-            playMusic();
-            
-            // Stop trying after music starts or max attempts reached
-            if (musicStarted || interactionAttempts >= maxAttempts) {
-                ['click', 'touchstart', 'touchend', 'touchmove', 'scroll', 'keydown', 'pointerdown'].forEach(evt => {
+            if (musicStarted) {
+                ['click', 'touchstart', 'scroll'].forEach(evt => {
                     document.removeEventListener(evt, handleInteraction);
-                    document.body.removeEventListener(evt, handleInteraction);
                 });
-                if (musicStarted) {
-                    console.log('🎵 Music system initialized and playing');
-                }
             }
         }
 
-        // Listen on both document and body for maximum coverage
-        ['click', 'touchstart', 'touchend', 'touchmove', 'scroll', 'keydown', 'pointerdown'].forEach(evt => {
-            document.addEventListener(evt, handleInteraction, { passive: true, capture: true });
-            document.body.addEventListener(evt, handleInteraction, { passive: true, capture: true });
+        ['click', 'touchstart', 'scroll'].forEach(evt => {
+            document.addEventListener(evt, handleInteraction, { passive: true, once: true });
         });
 
-        // Handle visibility changes
+        // Pause/resume on visibility change
         document.addEventListener('visibilitychange', () => {
             if (document.hidden) {
-                if (!music.paused) {
-                    music.pause();
-                }
-            } else if (musicStarted && music.paused) {
-                playMusic();
+                music.pause();
+            } else if (musicStarted) {
+                music.play();
             }
         });
 
         // --- Loader Logic ---
         const progressBar = document.getElementById('progress-bar');
         const loader = document.getElementById('page-loader');
-
-        const imagesToLoad = [
-            'love.png',
-            'yaz_abi.jpeg'
-        ];
-
+        const imagesToLoad = ['love.png', 'yaz_abi.jpeg'];
         let imagesLoadedCount = 0;
-        const totalImages = imagesToLoad.length;
 
         function updateProgress() {
             imagesLoadedCount++;
-            const percent = (imagesLoadedCount / totalImages) * 100;
-            progressBar.style.width = percent + '%';
-
-            if (imagesLoadedCount === totalImages) {
+            progressBar.style.width = (imagesLoadedCount / imagesToLoad.length * 100) + '%';
+            if (imagesLoadedCount === imagesToLoad.length) {
                 finishLoading();
             }
         }
@@ -687,9 +608,6 @@
                 loader.classList.add('loader-hidden');
                 document.body.classList.remove('loading');
                 AOS.init({ once: true, offset: 100 });
-                
-                // Immediately try to play music when loader finishes
-                preloadAudio();
                 playMusic();
             }, 500);
         }
@@ -701,28 +619,20 @@
             img.onerror = updateProgress;
         });
 
-        if (totalImages === 0) finishLoading();
-
         // --- Countdown Timer ---
         function updateCountdown() {
             const weddingDate = new Date('January 18, 2026 11:00:00').getTime();
             const now = new Date().getTime();
             const gap = weddingDate - now;
 
-            const second = 1000;
-            const minute = second * 60;
-            const hour = minute * 60;
-            const day = hour * 24;
+            const day = 24 * 60 * 60 * 1000;
+            const hour = 60 * 60 * 1000;
+            const minute = 60 * 1000;
 
-            const d = Math.floor(gap / day);
-            const h = Math.floor((gap % day) / hour);
-            const m = Math.floor((gap % hour) / minute);
-            const s = Math.floor((gap % minute) / second);
-
-            document.getElementById('days').innerText = d;
-            document.getElementById('hours').innerText = h;
-            document.getElementById('minutes').innerText = m;
-            document.getElementById('seconds').innerText = s;
+            document.getElementById('days').innerText = Math.floor(gap / day);
+            document.getElementById('hours').innerText = Math.floor((gap % day) / hour);
+            document.getElementById('minutes').innerText = Math.floor((gap % hour) / minute);
+            document.getElementById('seconds').innerText = Math.floor((gap % minute) / 1000);
         }
 
         setInterval(updateCountdown, 1000);
@@ -732,19 +642,11 @@
         function createPetal() {
             const petal = document.createElement('div');
             petal.classList.add('petal');
-
-            const startLeft = Math.random() * window.innerWidth;
-            const size = Math.random() * 10 + 10;
-            const duration = Math.random() * 5 + 8;
-
-            petal.style.left = startLeft + 'px';
-            petal.style.width = size + 'px';
-            petal.style.height = size + 'px';
-            petal.style.animationDuration = duration + 's';
-
+            petal.style.left = Math.random() * window.innerWidth + 'px';
+            petal.style.width = petal.style.height = (Math.random() * 10 + 10) + 'px';
+            petal.style.animationDuration = (Math.random() * 5 + 8) + 's';
             document.getElementById('petal-container').appendChild(petal);
-
-            setTimeout(() => petal.remove(), duration * 1000);
+            setTimeout(() => petal.remove(), 13000);
         }
 
         setInterval(createPetal, 500);
@@ -754,25 +656,17 @@
             const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
             if (isMobile) {
-                const event = {
-                    title: "Shahshad & Ahabima Wedding",
-                    start: "20260118T053000Z",
-                    end: "20260118T093000Z",
-                    location: "Madavoor Palace Auditorium, Makkaraparamba",
-                    description: "Join us to celebrate our wedding!"
-                };
-
                 const icsContent = [
                     'BEGIN:VCALENDAR',
                     'VERSION:2.0',
                     'PRODID:-//Shahshad and Ahabima//Wedding Invitation//EN',
                     'CALSCALE:GREGORIAN',
                     'BEGIN:VEVENT',
-                    `SUMMARY:${event.title}`,
-                    `DTSTART:${event.start}`,
-                    `DTEND:${event.end}`,
-                    `LOCATION:${event.location}`,
-                    `DESCRIPTION:${event.description}`,
+                    'SUMMARY:Shahshad & Ahabima Wedding',
+                    'DTSTART:20260118T053000Z',
+                    'DTEND:20260118T093000Z',
+                    'LOCATION:Madavoor Palace Auditorium, Makkaraparamba',
+                    'DESCRIPTION:Join us to celebrate our wedding!',
                     'STATUS:CONFIRMED',
                     'SEQUENCE:0',
                     'END:VEVENT',
@@ -780,780 +674,14 @@
                 ].join('\r\n');
 
                 const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
-                const url = window.URL.createObjectURL(blob);
+                const url = URL.createObjectURL(blob);
                 const link = document.createElement('a');
                 link.href = url;
-                link.setAttribute('download', 'Shahshad_Ahabima_Wedding.ics');
-                document.body.appendChild(link);
+                link.download = 'Shahshad_Ahabima_Wedding.ics';
                 link.click();
-                document.body.removeChild(link);
-                window.URL.revokeObjectURL(url);
+                URL.revokeObjectURL(url);
             } else {
-                const googleCalUrl = "https://calendar.google.com/calendar/u/0/r/eventedit/MGQzOGxnNWxhbGNiMWR1aTN1ajEzNGVjOTkgMGYwYWVjMGViZDhjZjk5NzY4ZGMyZDZmMmI2MWNlMzBlYjI5NjEwOGQxODA1ODZjZDE4YjA0OGRiOWRlNGE2ZUBn";
-                window.open(googleCalUrl, '_blank');
-            }
-        }
-    </script>
-</body>
-
-</html>
-
-    <!-- Social Media Sharing (Open Graph) -->
-    <meta property="og:title" content="Shahashad  &  Ahabima - Wedding Invitation">
-    <meta property="og:description"
-        content="We are getting married! Join us on January, 2026 at Madavoor Palace Auditorium.">
-    <meta property="og:image" content="ChatGPT Image Jan 4, 2026, 12_58_51 AM.png">
-    <meta property="og:url" content="https://shahasad-yaz.github.io/wedding-invitation/">
-    <meta property="og:type" content="website">
-
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Shahashad  &  Ahabima - Wedding Invitation">
-    <meta name="twitter:description"
-        content="We are getting married! Join us on January 18, 2026 at Madavoor Palace Auditorium.">
-    <meta name="twitter:image" content="love.png">
-
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Allison&family=Monsieur+La+Doulaise&family=Pinyon+Script&display=swap" rel="stylesheet">
-
-    <!-- Performance Optimizations -->
-    <link rel="preload" as="image" href="love.jpeg">
-
-    <style>
-        :root {
-            --text-burgundy: #7B1124;
-            --gold-accent: #C5A059;
-            --cream-bg: #F9F9F4;
-            --dark-overlay: rgba(0, 0, 0, 0.4);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            background-color: var(--cream-bg);
-            font-family: 'Playfair Display', serif;
-            overflow-x: hidden;
-            color: var(--text-burgundy);
-        }
-
-        /* --- GRAIN TEXTURE OVERLAY --- */
-        .texture-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 9000;
-            opacity: 0.05;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-        }
-
-
-
-        /* --- FALLING PETALS ANIMATION --- */
-        #petal-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 9999;
-            overflow: hidden;
-        }
-
-        .petal {
-            position: absolute;
-            background-color: rgba(123, 17, 36, 0.6);
-            border-radius: 150% 0 150% 0;
-            animation: fall linear infinite;
-        }
-
-        @keyframes fall {
-            0% {
-                transform: translate(0, -10vh) rotate(0deg);
-                opacity: 0;
-            }
-            10% {
-                opacity: 1;
-            }
-            100% {
-                transform: translate(100px, 110vh) rotate(360deg);
-                opacity: 0;
-            }
-        }
-
-        /* --- HERO SECTION --- */
-        .hero {
-            position: relative;
-            height: 100vh;
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-        }
-
-        .hero-bg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-size: cover;
-            background-position: center;
-            background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.6)), url('love.png');
-            z-index: -1;
-            transform: scale(1.1);
-            animation: slowZoom 20s infinite alternate;
-        }
-
-        @keyframes slowZoom {
-            from { transform: scale(1.1); }
-            to { transform: scale(1.2); }
-        }
-
-        .hero-content {
-            text-align: center;
-            color: white;
-            z-index: 2;
-            padding: 20px;
-        }
-
-        .pre-title {
-            font-size: 1.2rem;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            margin-bottom: 10px;
-            opacity: 0.9;
-        }
-
-        .main-title {
-            font-family: "Allison", cursive;
-            font-size: 5rem;
-            line-height: 1.2;
-            margin-bottom: 15px;
-            text-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-        }
-
-        .date-text {
-            font-size: 1.5rem;
-            letter-spacing: 2px;
-            border-top: 1px solid rgba(255, 255, 255, 0.5);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.5);
-            padding: 10px 20px;
-            display: inline-block;
-            margin-top: 20px;
-        }
-
-        .scroll-indicator {
-            position: absolute;
-            bottom: 12vh;
-            left: 50%;
-            transform: translateX(-50%);
-            color: white;
-            font-size: 1.8rem;
-            animation: bounce 2s infinite;
-            opacity: 1;
-            z-index: 20;
-            cursor: pointer;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            backdrop-filter: blur(3px);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
-        }
-
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% {
-                transform: translateX(-50%) translateY(0);
-            }
-            40% {
-                transform: translateX(-50%) translateY(-10px);
-            }
-            60% {
-                transform: translateX(-50%) translateY(-5px);
-            }
-        }
-
-        /* --- INVITATION SECTION --- */
-        .invitation-section {
-            position: relative;
-            padding: 40px 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            background-color: var(--cream-bg);
-            min-height: 100vh;
-        }
-
-        .section-title {
-            font-family: 'pinyon Script', cursive;
-            font-size: 3rem;
-            color: var(--text-burgundy);
-            margin-bottom: 30px;
-            text-align: center;
-        }
-
-        .invite-card-wrapper {
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
-            max-width: 600px;
-            width: 100%;
-            border-radius: 4px;
-            overflow: hidden;
-            margin-bottom: 40px;
-            background: white;
-            padding: 10px;
-        }
-
-        .invite-image {
-            width: 100%;
-            display: block;
-        }
-
-        /* --- ACTION BUTTONS --- */
-        .actions-container {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            width: 100%;
-            max-width: 600px;
-            margin-bottom: 50px;
-            padding: 0 10px;
-            flex-wrap: nowrap;
-        }
-
-        .btn {
-            display: inline-flex;
-            justify-content: center;
-            align-items: center;
-            font-family: 'Playwrite NO', cursive !important;
-            font-size: 0.9rem;
-            font-weight: 400;
-            padding: 12px 20px;
-            border-radius: 50px;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            letter-spacing: 0px;
-            text-transform: none;
-            flex: 1;
-            white-space: nowrap;
-            position: relative;
-            overflow: hidden;
-            line-height: 1.5;
-        }
-
-        .btn-primary {
-            background-color: var(--text-burgundy);
-            color: white;
-            box-shadow: 0 5px 15px rgba(123, 17, 36, 0.3);
-        }
-
-        .btn-secondary {
-            background-color: white;
-            color: var(--text-burgundy);
-            border: 1px solid var(--text-burgundy);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-        }
-
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-        }
-
-        .btn-primary:hover {
-            background-color: #5a0b19;
-        }
-
-        .btn-secondary:hover {
-            background-color: var(--text-burgundy);
-            color: white;
-        }
-
-        .btn svg {
-            margin-right: 8px;
-            width: 18px;
-            height: 18px;
-            fill: currentColor;
-            flex-shrink: 0;
-        }
-
-        /* --- COUNTDOWN TIMER --- */
-        .countdown-container {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            margin-top: 30px;
-            color: white;
-        }
-
-        .countdown-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .countdown-number {
-            font-family: 'Playfair Display', serif;
-            font-size: 2.5rem;
-            font-weight: 700;
-            line-height: 1;
-            color: var(--gold-accent);
-            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
-        }
-
-        .countdown-label {
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-top: 5px;
-            opacity: 0.9;
-        }
-
-        /* --- ASSET LOADER --- */
-        #page-loader {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #000000;
-            z-index: 99999;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            transition: opacity 0.5s ease-out, visibility 0.5s ease-out;
-        }
-
-        .loader-text-small {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 0.8rem;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            color: var(--gold-accent);
-            margin-bottom: 15px;
-            opacity: 0.9;
-        }
-
-        .progress-container {
-            width: 200px;
-            height: 4px;
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 2px;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .progress-bar {
-            width: 0%;
-            height: 100%;
-            background-color: var(--gold-accent);
-            transition: width 0.2s ease-out;
-            border-radius: 2px;
-            box-shadow: 0 0 10px rgba(197, 160, 89, 0.5);
-        }
-
-        .loader-hidden {
-            opacity: 0;
-            visibility: hidden;
-        }
-
-        body.loading {
-            overflow: hidden;
-        }
-
-        /* Mobile Adjustments */
-        @media (max-width: 600px) {
-            .main-title {
-                font-size: 3.5rem;
-            }
-
-            .pre-title {
-                font-size: 0.9rem;
-            }
-
-            .date-text {
-                font-size: 1.1rem;
-                padding: 8px 15px;
-            }
-
-            .invitation-section {
-                padding: 0;
-            }
-
-            .section-title {
-                margin: 30px 0 10px;
-                font-size: 2.5rem;
-            }
-
-            .invite-card-wrapper {
-                border-radius: 0;
-                box-shadow: none;
-                padding: 0;
-                margin-bottom: 30px;
-            }
-
-            .actions-container {
-                padding: 0 15px 40px;
-                gap: 10px;
-            }
-
-            .btn {
-                font-size: 0.75rem;
-                padding: 12px 10px;
-                min-width: auto;
-            }
-
-            .btn svg {
-                width: 16px;
-                height: 16px;
-                margin-right: 5px;
-            }
-
-            .countdown-container {
-                gap: 15px;
-            }
-
-            .countdown-number {
-                font-size: 1.8rem;
-            }
-
-            .countdown-label {
-                font-size: 0.6rem;
-            }
-        }
-    </style>
-</head>
-
-<body class="loading">
-
-    <!-- ASSET LOADER OVERLAY -->
-    <div id="page-loader">
-        <div class="loader-text-small">Loading...</div>
-        <div class="progress-container">
-            <div class="progress-bar" id="progress-bar"></div>
-        </div>
-    </div>
-
-    <!-- Grain Texture -->
-    <div class="texture-overlay"></div>
-
-    <!-- Falling Petals -->
-    <div id="petal-container"></div>
-
-    <!-- Background Music -->
-    <audio id="bg-music" loop preload="auto">
-        <source src="bbackground.mp3" type="audio/mpeg">
-        Your browser does not support the audio element.
-    </audio>
-
-    <section class="hero">
-        <div class="hero-bg"></div>
-
-        <div class="hero-content" data-aos="fade-up" data-aos-duration="2000">
-            <p class="pre-title">The Wedding Of</p>
-            <h1 class="main-title">Shahshad & Ahabima</h1>
-            <p class="date-text">January 18, 2026</p>
-
-            <div class="countdown-container">
-                <div class="countdown-item">
-                    <span class="countdown-number" id="days">00</span>
-                    <span class="countdown-label">Days</span>
-                </div>
-                <div class="countdown-item">
-                    <span class="countdown-number" id="hours">00</span>
-                    <span class="countdown-label">Hours</span>
-                </div>
-                <div class="countdown-item">
-                    <span class="countdown-number" id="minutes">00</span>
-                    <span class="countdown-label">Mins</span>
-                </div>
-                <div class="countdown-item">
-                    <span class="countdown-number" id="seconds">00</span>
-                    <span class="countdown-label">Secs</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="scroll-indicator">↓</div>
-    </section>
-
-    <section class="invitation-section">
-        <div class="section-title" data-aos="fade-in">You are invited</div>
-
-        <div class="invite-card-wrapper" data-aos="zoom-in-up" data-aos-duration="1500">
-            <img src="yaz_abi.jpeg" alt="Shahashad & Ahabima Invitation" class="invite-image" loading="eager">
-        </div>
-
-        <div class="actions-container" data-aos="fade-up">
-            <a href="https://www.google.com/maps/place/MADAVOOR+PALACE/@11.3502359,75.8766856,14z/data=!3m1!4b1!4m6!3m5!1s0x3ba65d0048d62b87:0x137f7777b0010bae!8m2!3d11.3502359!4d75.8766856!16s%2Fg%2F11wttycytb?entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D"
-                target="_blank" class="btn btn-primary">
-                <svg viewBox="0 0 24 24">
-                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
-                </svg>
-                Navigate to Venue
-            </a>
-
-            <a href="javascript:void(0)" onclick="addToCalendar()" class="btn btn-secondary">
-                <svg viewBox="0 0 24 24">
-                    <path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2zm-7 5h5v5h-5z" />
-                </svg>
-                Add to Calendar
-            </a>
-        </div>
-    </section>
-
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script>
-        // --- Aggressive Music Control for Mobile ---
-        const music = document.getElementById('bg-music');
-        let musicStarted = false;
-        let loadAttempted = false;
-
-        // Set volume to ensure it's audible
-        music.volume = 0.7;
-
-        // Preload the audio
-        function preloadAudio() {
-            if (!loadAttempted) {
-                loadAttempted = true;
-                music.load();
-                console.log('Audio preloading started');
-            }
-        }
-
-        // Event listeners for debugging
-        music.addEventListener('loadedmetadata', () => {
-            console.log('✅ Audio metadata loaded - Duration:', music.duration, 'seconds');
-        });
-
-        music.addEventListener('canplaythrough', () => {
-            console.log('✅ Audio can play through without buffering');
-        });
-
-        music.addEventListener('error', (e) => {
-            console.error('❌ Audio error:', music.error ? music.error.code : 'unknown');
-        });
-
-        music.addEventListener('play', () => {
-            console.log('▶️ Audio playing');
-        });
-
-        music.addEventListener('pause', () => {
-            console.log('⏸️ Audio paused');
-        });
-
-        // Attempt to play music
-        function playMusic() {
-            if (musicStarted) return;
-
-            console.log('Attempting to play music... readyState:', music.readyState);
-            
-            // Ensure audio is loaded
-            if (music.readyState === 0) {
-                preloadAudio();
-                // Try again after a short delay
-                setTimeout(playMusic, 100);
-                return;
-            }
-
-            music.play()
-                .then(() => {
-                    musicStarted = true;
-                    console.log('✅ SUCCESS! Music is playing');
-                })
-                .catch(err => {
-                    console.warn('⚠️ Play failed:', err.message);
-                    // Don't give up, try again on next interaction
-                });
-        }
-
-        // Immediate play attempt (will likely fail but worth trying)
-        setTimeout(() => {
-            preloadAudio();
-            playMusic();
-        }, 1000);
-
-        // Play on ANY user interaction - be very aggressive
-        let interactionAttempts = 0;
-        const maxAttempts = 5;
-
-        function handleInteraction(e) {
-            interactionAttempts++;
-            console.log(`User interaction #${interactionAttempts}:`, e.type);
-            
-            playMusic();
-            
-            // Stop trying after music starts or max attempts reached
-            if (musicStarted || interactionAttempts >= maxAttempts) {
-                ['click', 'touchstart', 'touchend', 'touchmove', 'scroll', 'keydown', 'pointerdown'].forEach(evt => {
-                    document.removeEventListener(evt, handleInteraction);
-                    document.body.removeEventListener(evt, handleInteraction);
-                });
-                if (musicStarted) {
-                    console.log('🎵 Music system initialized and playing');
-                }
-            }
-        }
-
-        // Listen on both document and body for maximum coverage
-        ['click', 'touchstart', 'touchend', 'touchmove', 'scroll', 'keydown', 'pointerdown'].forEach(evt => {
-            document.addEventListener(evt, handleInteraction, { passive: true, capture: true });
-            document.body.addEventListener(evt, handleInteraction, { passive: true, capture: true });
-        });
-
-        // Handle visibility changes
-        document.addEventListener('visibilitychange', () => {
-            if (document.hidden) {
-                if (!music.paused) {
-                    music.pause();
-                }
-            } else if (musicStarted && music.paused) {
-                playMusic();
-            }
-        });
-
-        // --- Loader Logic ---
-        const progressBar = document.getElementById('progress-bar');
-        const loader = document.getElementById('page-loader');
-
-        const imagesToLoad = [
-            'love.png',
-            'yaz_abi.jpeg'
-        ];
-
-        let imagesLoadedCount = 0;
-        const totalImages = imagesToLoad.length;
-
-        function updateProgress() {
-            imagesLoadedCount++;
-            const percent = (imagesLoadedCount / totalImages) * 100;
-            progressBar.style.width = percent + '%';
-
-            if (imagesLoadedCount === totalImages) {
-                finishLoading();
-            }
-        }
-
-        function finishLoading() {
-            setTimeout(() => {
-                loader.classList.add('loader-hidden');
-                document.body.classList.remove('loading');
-                AOS.init({ once: true, offset: 100 });
-                
-                // Load music file
-                music.load();
-            }, 500);
-        }
-
-        imagesToLoad.forEach(src => {
-            const img = new Image();
-            img.src = src;
-            img.onload = updateProgress;
-            img.onerror = updateProgress;
-        });
-
-        if (totalImages === 0) finishLoading();
-
-        // --- Countdown Timer ---
-        function updateCountdown() {
-            const weddingDate = new Date('January 18, 2026 11:00:00').getTime();
-            const now = new Date().getTime();
-            const gap = weddingDate - now;
-
-            const second = 1000;
-            const minute = second * 60;
-            const hour = minute * 60;
-            const day = hour * 24;
-
-            const d = Math.floor(gap / day);
-            const h = Math.floor((gap % day) / hour);
-            const m = Math.floor((gap % hour) / minute);
-            const s = Math.floor((gap % minute) / second);
-
-            document.getElementById('days').innerText = d;
-            document.getElementById('hours').innerText = h;
-            document.getElementById('minutes').innerText = m;
-            document.getElementById('seconds').innerText = s;
-        }
-
-        setInterval(updateCountdown, 1000);
-        updateCountdown();
-
-        // --- Rose Petals ---
-        function createPetal() {
-            const petal = document.createElement('div');
-            petal.classList.add('petal');
-
-            const startLeft = Math.random() * window.innerWidth;
-            const size = Math.random() * 10 + 10;
-            const duration = Math.random() * 5 + 8;
-
-            petal.style.left = startLeft + 'px';
-            petal.style.width = size + 'px';
-            petal.style.height = size + 'px';
-            petal.style.animationDuration = duration + 's';
-
-            document.getElementById('petal-container').appendChild(petal);
-
-            setTimeout(() => petal.remove(), duration * 1000);
-        }
-
-        setInterval(createPetal, 500);
-
-        // --- Add to Calendar ---
-        function addToCalendar() {
-            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-
-            if (isMobile) {
-                const event = {
-                    title: "Shahshad & Ahabima Wedding",
-                    start: "20260118T053000Z",
-                    end: "20260118T093000Z",
-                    location: "Madavoor Palace Auditorium, Makkaraparamba",
-                    description: "Join us to celebrate our wedding!"
-                };
-
-                const icsContent = [
-                    'BEGIN:VCALENDAR',
-                    'VERSION:2.0',
-                    'PRODID:-//Shahshad and Ahabima//Wedding Invitation//EN',
-                    'CALSCALE:GREGORIAN',
-                    'BEGIN:VEVENT',
-                    `SUMMARY:${event.title}`,
-                    `DTSTART:${event.start}`,
-                    `DTEND:${event.end}`,
-                    `LOCATION:${event.location}`,
-                    `DESCRIPTION:${event.description}`,
-                    'STATUS:CONFIRMED',
-                    'SEQUENCE:0',
-                    'END:VEVENT',
-                    'END:VCALENDAR'
-                ].join('\r\n');
-
-                const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
-                const url = window.URL.createObjectURL(blob);
-                const link = document.createElement('a');
-                link.href = url;
-                link.setAttribute('download', 'Shahshad_Ahabima_Wedding.ics');
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                window.URL.revokeObjectURL(url);
-            } else {
-                const googleCalUrl = "https://calendar.google.com/calendar/u/0/r/eventedit/MGQzOGxnNWxhbGNiMWR1aTN1ajEzNGVjOTkgMGYwYWVjMGViZDhjZjk5NzY4ZGMyZDZmMmI2MWNlMzBlYjI5NjEwOGQxODA1ODZjZDE4YjA0OGRiOWRlNGE2ZUBn";
-                window.open(googleCalUrl, '_blank');
+                window.open("https://calendar.google.com/calendar/u/0/r/eventedit/MGQzOGxnNWxhbGNiMWR1aTN1ajEzNGVjOTkgMGYwYWVjMGViZDhjZjk5NzY4ZGMyZDZmMmI2MWNlMzBlYjI5NjEwOGQxODA1ODZjZDE4YjA0OGRiOWRlNGE2ZUBn", '_blank');
             }
         }
     </script>
