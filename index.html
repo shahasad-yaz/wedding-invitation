@@ -533,44 +533,111 @@
 
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-        // --- Music Control System (Mobile-Friendly) ---
+        // --- Aggressive Music Control for Mobile ---
         const music = document.getElementById('bg-music');
         let musicStarted = false;
+        let loadAttempted = false;
 
-        function attemptPlayMusic() {
+        // Set volume to ensure it's audible
+        music.volume = 0.7;
+
+        // Preload the audio
+        function preloadAudio() {
+            if (!loadAttempted) {
+                loadAttempted = true;
+                music.load();
+                console.log('Audio preloading started');
+            }
+        }
+
+        // Event listeners for debugging
+        music.addEventListener('loadedmetadata', () => {
+            console.log('✅ Audio metadata loaded - Duration:', music.duration, 'seconds');
+        });
+
+        music.addEventListener('canplaythrough', () => {
+            console.log('✅ Audio can play through without buffering');
+        });
+
+        music.addEventListener('error', (e) => {
+            console.error('❌ Audio error:', music.error ? music.error.code : 'unknown');
+        });
+
+        music.addEventListener('play', () => {
+            console.log('▶️ Audio playing');
+        });
+
+        music.addEventListener('pause', () => {
+            console.log('⏸️ Audio paused');
+        });
+
+        // Attempt to play music
+        function playMusic() {
             if (musicStarted) return;
+
+            console.log('Attempting to play music... readyState:', music.readyState);
             
+            // Ensure audio is loaded
+            if (music.readyState === 0) {
+                preloadAudio();
+                // Try again after a short delay
+                setTimeout(playMusic, 100);
+                return;
+            }
+
             music.play()
                 .then(() => {
                     musicStarted = true;
-                    console.log('Music started successfully');
+                    console.log('✅ SUCCESS! Music is playing');
                 })
                 .catch(err => {
-                    console.log('Music autoplay blocked, waiting for user interaction');
+                    console.warn('⚠️ Play failed:', err.message);
+                    // Don't give up, try again on next interaction
                 });
         }
 
-        // Try to play on various interactions
-        const interactionEvents = ['click', 'touchstart', 'touchend', 'scroll'];
-        
-        function playOnInteraction() {
-            attemptPlayMusic();
-            // Remove all listeners after first attempt
-            interactionEvents.forEach(event => {
-                document.removeEventListener(event, playOnInteraction);
-            });
+        // Immediate play attempt (will likely fail but worth trying)
+        setTimeout(() => {
+            preloadAudio();
+            playMusic();
+        }, 1000);
+
+        // Play on ANY user interaction - be very aggressive
+        let interactionAttempts = 0;
+        const maxAttempts = 5;
+
+        function handleInteraction(e) {
+            interactionAttempts++;
+            console.log(`User interaction #${interactionAttempts}:`, e.type);
+            
+            playMusic();
+            
+            // Stop trying after music starts or max attempts reached
+            if (musicStarted || interactionAttempts >= maxAttempts) {
+                ['click', 'touchstart', 'touchend', 'touchmove', 'scroll', 'keydown', 'pointerdown'].forEach(evt => {
+                    document.removeEventListener(evt, handleInteraction);
+                    document.body.removeEventListener(evt, handleInteraction);
+                });
+                if (musicStarted) {
+                    console.log('🎵 Music system initialized and playing');
+                }
+            }
         }
 
-        interactionEvents.forEach(event => {
-            document.addEventListener(event, playOnInteraction, { passive: true });
+        // Listen on both document and body for maximum coverage
+        ['click', 'touchstart', 'touchend', 'touchmove', 'scroll', 'keydown', 'pointerdown'].forEach(evt => {
+            document.addEventListener(evt, handleInteraction, { passive: true, capture: true });
+            document.body.addEventListener(evt, handleInteraction, { passive: true, capture: true });
         });
 
-        // Pause/resume on visibility change
+        // Handle visibility changes
         document.addEventListener('visibilitychange', () => {
             if (document.hidden) {
-                music.pause();
-            } else if (musicStarted) {
-                music.play().catch(err => console.log('Resume blocked:', err));
+                if (!music.paused) {
+                    music.pause();
+                }
+            } else if (musicStarted && music.paused) {
+                playMusic();
             }
         });
 
